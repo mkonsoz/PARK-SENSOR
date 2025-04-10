@@ -4,11 +4,11 @@ This project is a smart parking sensor system developed using an ESP32 microcont
 📷 Project Overview
 Distance measurements are taken from front, rear, left, and right directions.
 
-Through the Nextion display, the user can perform operations such as vehicle type selection, distance visualization, and buzzer control.
+The Nextion display allows the user to perform operations such as selecting a vehicle type, visualizing distance, and controlling the buzzer.
 
 According to different distance ranges, both warning icons are shown on the screen, and various warning sounds are played via buzzers.
 
-
+d
 
 🧰 Hardware Used
 Hardware	Description
@@ -18,7 +18,7 @@ Nextion NX4827T043_011	Touchscreen for user interface (UI)
 4x Buzzer	Audio alerts from front, rear, left, and right
 Jumper Wires	For connections
 5V Power Supply	To power the ESP32 and sensors
----
+
 
 🧠 Software Features
 FreeRTOS-based task structure:
@@ -50,7 +50,7 @@ GPIO 2	Rear Buzzer
 GPIO 4	Right Buzzer
 GPIO 16	Nextion RX (ESP32 TXD2)
 GPIO 17	Nextion TX (ESP32 RXD2)
----
+
 
 ▶️ How to Use
 Connect the ESP32 to your computer.
@@ -76,7 +76,7 @@ UltrasonicSensor.h / .cpp – Distance measurement from sensors
 Nextion.h / .cpp – Control of the Nextion display
 
 Buzzer.h / .cpp – Buzzer control
----
+
 
 
 
