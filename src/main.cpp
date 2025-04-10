@@ -16,6 +16,7 @@ TaskHandle_t SensorTask;
 TaskHandle_t PageTask;
 TaskHandle_t DisplayTask;
 SemaphoreHandle_t xMutex;
+
 int currentPage=0;
 
 volatile int mesafe_f=0;
@@ -66,11 +67,14 @@ void pageTask(void * parameter){
         }
       Serial.print("Gelen Veri:   ");
       Serial.print(header, HEX); Serial.print(" ");
+     
       Serial.print(type, HEX);   Serial.print(" ");
+     
       Serial.print(buttonID, HEX); Serial.print(" ");
       Serial.print(lastID, HEX);
 
         delay(50);
+        
         if(header == 0x65 && type==0x00 && buttonID==0x02  && lastID == 0x00){
               nex.changePage(1);
               currentPage=1;
@@ -92,6 +96,11 @@ void pageTask(void * parameter){
        else if(header == 0x65 && type==0x02 && buttonID==0x02 && lastID == 0x00){
               
               nex.changePage(4);
+               for(int i= 2 ; i<=21; i++){
+               nex.hideImage(i);
+              delay(10);
+              }
+
               currentPage=4;
               buzzerEnabled_f=true;
               buzzerEnabled_b=true;
@@ -101,6 +110,11 @@ void pageTask(void * parameter){
        }
        else if(header == 0x65 && type==0x02 && buttonID==0x03 && lastID == 0x00){
               nex.changePage(5);
+              
+               for(int i= 2 ; i<=21; i++){
+               nex.hideImage(i);
+              delay(10);
+              }
               currentPage=5;
               buzzerEnabled_f=true;
               buzzerEnabled_b=true;
@@ -110,6 +124,11 @@ void pageTask(void * parameter){
        }
        else if(header == 0x65 && type==0x02 && buttonID==0x04 && lastID == 0x00){
               nex.changePage(6);
+       
+               for(int i= 2 ; i<=21; i++){
+               nex.hideImage(i);
+               delay(10);
+              }
               currentPage=6;
               buzzerEnabled_f=true;
               buzzerEnabled_b=true;
@@ -119,6 +138,11 @@ void pageTask(void * parameter){
        }
        else if(header == 0x65 && type==0x02 && buttonID==0x05 && lastID == 0x00){
               nex.changePage(7);
+              
+               for(int i= 2 ; i<=21; i++){
+               nex.hideImage(i);
+              delay(10);
+              }
               currentPage=7;
               buzzerEnabled_f=true;
               buzzerEnabled_b=true;
@@ -128,6 +152,11 @@ void pageTask(void * parameter){
        }
        else if(header == 0x65 && type==0x02 && buttonID==0x06 && lastID == 0x00){
               nex.changePage(8);
+             
+               for(int i= 2 ; i<=21; i++){
+               nex.hideImage(i);
+              delay(10);
+              }
               currentPage=8;
               buzzerEnabled_f=true;
               buzzerEnabled_b=true;
@@ -137,6 +166,7 @@ void pageTask(void * parameter){
        } 
        else if(header == 0x65 && type==0x03 && buttonID==0x02 && lastID == 0x00){
               nex.changePage(4);
+       
               currentPage=4;
               buzzerEnabled_f=true;
               buzzerEnabled_b=true;
@@ -181,6 +211,7 @@ void pageTask(void * parameter){
       
        }
        else if(header == 0x65 && type==0x04 && buttonID==0x1A && lastID == 0x00){
+             
               buzzer_f.stop();
               buzzer_b.stop();
               buzzer_r.stop();
@@ -190,7 +221,7 @@ void pageTask(void * parameter){
               buzzerEnabled_b=false;
               buzzerEnabled_l=false;
               buzzerEnabled_r=false;
-      
+                                     
        }
        else if(header == 0x65 && type==0x05 && buttonID==0x1A && lastID == 0x00){
               buzzer_f.stop();
@@ -240,7 +271,9 @@ void pageTask(void * parameter){
               currentPage=1;
        }
         else if(header == 0x65 && type==0x04 && buttonID==0x1C && lastID == 0x00){
-              
+               buzzer_f.stop();
+               buzzer_b.stop();
+               buzzer_r.stop();
                nex.hideImage(28);
                buzzerEnabled_f=false;
                buzzerEnabled_b=false;
@@ -262,11 +295,11 @@ void pageTask(void * parameter){
               buzzerEnabled_r=false;
       }
       else if(header == 0x65 && type==0x05 && buttonID==0x1B && lastID == 0x00){
-       nex.showImage(28);
-       buzzerEnabled_f=true;
-       buzzerEnabled_b=true;
-       buzzerEnabled_l=true;
-       buzzerEnabled_r=true;
+             nex.showImage(28);
+             buzzerEnabled_f=true;
+             buzzerEnabled_b=true;
+             buzzerEnabled_l=true;
+             buzzerEnabled_r=true;
       }
       else if(header == 0x65 && type==0x06 && buttonID==0x1C && lastID == 0x00){
                 buzzer_f.stop();
@@ -285,7 +318,7 @@ void pageTask(void * parameter){
               buzzerEnabled_l=true;
               buzzerEnabled_r=true;
       }   else if(header == 0x65 && type==0x07 && buttonID==0x1C && lastID == 0x00){
-       buzzer_f.stop();
+               buzzer_f.stop();
                buzzer_b.stop();
                buzzer_r.stop();
                nex.hideImage(28);
@@ -317,8 +350,8 @@ void pageTask(void * parameter){
               buzzerEnabled_b=true;
               buzzerEnabled_l=true;
               buzzerEnabled_r=true;
-}
-
+       }
+       
             nex.readNextionData();
             xSemaphoreGive(xMutex);
           } 
@@ -339,10 +372,11 @@ void displayTask(void * parameter){
   while (true)
   {
     
+          
+
     nex.updateDistanceOnDisplay(mesafe_f,mesafe_l,mesafe_b,mesafe_r);
     
-     
-     
+   
 
     if (mesafe_f > 65) { 
             buzzer_f.stop();
@@ -458,6 +492,8 @@ void displayTask(void * parameter){
             nex.hideImage(19);
             nex.hideImage(20);  
             nex.hideImage(21);
+
+            
      }
  
     else if (mesafe_l > 55 && mesafe_l <= 65) {
@@ -557,8 +593,8 @@ void displayTask(void * parameter){
 void setup() {
  Serial.begin(9600);
  Serial2.begin(9600,SERIAL_8N1,16,17);
- //delay(1000);
  xMutex = xSemaphoreCreateMutex();
+
   if (xMutex == NULL) {
     Serial.println("HATA: Mutex oluşturulamadı! Bellek yetersiz olabilir.");
     while (1); 
@@ -572,10 +608,7 @@ void setup() {
  buzzer_f.begin();
  buzzer_b.begin();
  buzzer_r.begin();
- /*for(int i= 0 ; i<=21; i++){
-         nex.hideImage(i);
-  delay(10);
- }*/
+ 
  nex.updateDistanceOnDisplay(0,0,0,0);
   xTaskCreatePinnedToCore(
     sensorTask,
